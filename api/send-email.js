@@ -13,7 +13,7 @@ export default async function handler(req, res) {
   try {
     const data = await resend.emails.send({
       from: 'Portfolio Contact <onboarding@resend.dev>',
-      to: 'proyectos@nexatech.com.co', // Tu correo de destino
+      to: 'hadavid36@gmail.com', // Nueva cuenta: hadavid36
       subject: `Nuevo mensaje de ${name}`,
       html: `
         <h3>Nuevo mensaje de contacto</h3>
