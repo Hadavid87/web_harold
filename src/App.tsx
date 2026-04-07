@@ -22,12 +22,14 @@ import {
   Cpu,
   CheckCircle2,
   Menu,
-  X
+  X,
+  Sun,
+  Moon
 } from 'lucide-react';
 
 // --- Components ---
 
-const Navbar = () => {
+const Navbar = ({ darkMode, toggleDarkMode }: { darkMode: boolean, toggleDarkMode: () => void }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -42,49 +44,68 @@ const Navbar = () => {
     { name: 'Sobre Mí', href: '#about' },
     { name: 'Servicios', href: '#services' },
     { name: 'Proyectos', href: '#projects' },
-    { name: 'Contacto', href: '#contact' },
+    { name: 'Hablemos de tu proyecto', href: '#contact' },
   ];
 
   return (
-    <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${isScrolled ? 'glass py-3 shadow-sm' : 'bg-transparent py-5'}`}>
+    <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-white/80 dark:bg-slate-950/80 backdrop-blur-md py-3 shadow-sm border-b border-slate-100 dark:border-slate-800' : 'bg-transparent py-5'}`}>
       <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
-        <a href="#home" className="text-2xl font-bold font-display tracking-tight text-primary">
+        <a href="#home" className="text-2xl font-bold font-display tracking-tight text-primary dark:text-blue-400">
           Harold<span className="text-accent">.dev</span>
         </a>
 
         {/* Desktop Nav */}
-        <div className="hidden md:flex gap-8 items-center">
+        <div className="hidden lg:flex gap-8 items-center">
           {navLinks.map((link) => (
             <a
               key={link.name}
               href={link.href}
-              className="text-lg font-medium text-slate-600 hover:text-accent transition-colors"
+              className="text-lg font-bold text-primary dark:text-white hover:text-accent dark:hover:text-blue-400 transition-colors"
             >
               {link.name}
             </a>
           ))}
+          
+          <button 
+            type="button"
+            onClick={toggleDarkMode}
+            className="p-3 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-yellow-400 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all border border-slate-200 dark:border-slate-700"
+            aria-label="Toggle Dark Mode"
+          >
+            {darkMode ? <Sun size={20} /> : <Moon size={20} />}
+          </button>
+
           <a
             href="#contact"
-            className="bg-primary text-white px-8 py-3 rounded-full text-lg font-bold hover:bg-slate-800 transition-all shadow-lg shadow-slate-200"
+            className="bg-primary dark:bg-blue-600 text-white px-8 py-3 rounded-full text-lg font-bold hover:bg-slate-800 dark:hover:bg-blue-700 transition-all shadow-lg shadow-slate-200 dark:shadow-none"
           >
             Contratar
           </a>
         </div>
 
-        {/* Mobile Toggle */}
-        <button className="md:hidden text-primary" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
-          {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
+        <div className="lg:hidden flex items-center gap-4">
+          <button 
+            type="button"
+            onClick={toggleDarkMode} 
+            className="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-yellow-400"
+            aria-label="Toggle Dark Mode"
+          >
+             {darkMode ? <Sun size={20} /> : <Moon size={20} />}
+          </button>
+          <button className="text-primary dark:text-white" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+            {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
       </div>
-
-      {/* Mobile Menu */}
+      
+      {/* Mobile Menu Colors */}
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-white border-t border-slate-100 overflow-hidden"
+            className="lg:hidden bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800 overflow-hidden"
           >
             <div className="flex flex-col p-6 gap-4">
               {navLinks.map((link) => (
@@ -92,18 +113,11 @@ const Navbar = () => {
                   key={link.name}
                   href={link.href}
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="text-lg font-medium text-slate-600"
+                  className="text-lg font-bold text-slate-600 dark:text-slate-300"
                 >
                   {link.name}
                 </a>
               ))}
-              <a
-                href="#contact"
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="bg-primary text-white px-5 py-4 rounded-xl text-center font-bold text-xl"
-              >
-                Trabajemos juntos
-              </a>
             </div>
           </motion.div>
         )}
@@ -129,25 +143,25 @@ const Hero = () => {
             <span className="inline-block px-4 py-1.5 mb-6 text-sm font-bold tracking-wider text-accent uppercase bg-accent/10 rounded-full">
               Disponible para nuevos proyectos
             </span>
-            <h1 className="text-4xl md:text-6xl font-bold leading-tight mb-6 text-primary max-w-[600px]">
+            <h1 className="text-3xl md:text-5xl font-bold leading-tight mb-4 text-primary dark:text-white max-w-[600px]">
               Hola, soy Harold 👋 <br />
-              <span className="text-accent">Desarrollador Web</span> especializado en apps y dashboards
+              <span className="text-accent dark:text-blue-400">Fullstack Developer & AI Solutions Architect</span> especialista en apps y dashboards
             </h1>
-            <p className="text-xl text-slate-600 mb-10 leading-relaxed max-w-2xl">
+            <p className="text-lg text-slate-600 dark:text-slate-400 mb-8 leading-relaxed max-w-2xl">
               Creo soluciones digitales que optimizan procesos y aumentan la productividad.
               Transformo ideas complejas en herramientas simples y escalables.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <a
                 href="#projects"
-                className="group flex items-center justify-center gap-2 bg-primary text-white px-8 py-4 rounded-2xl font-bold text-lg hover:bg-slate-800 transition-all shadow-xl shadow-slate-200"
+                className="group flex items-center justify-center gap-2 bg-white dark:bg-slate-900 text-primary dark:text-white border-2 border-slate-100 dark:border-slate-800 px-6 py-4 rounded-2xl font-bold text-lg hover:border-accent hover:text-accent transition-all shadow-sm"
               >
                 Ver proyectos
                 <ChevronRight size={20} className="group-hover:translate-x-1 transition-transform" />
               </a>
               <a
                 href="#contact"
-                className="flex items-center justify-center gap-2 bg-white text-primary border-2 border-slate-100 px-8 py-4 rounded-2xl font-bold text-lg hover:border-accent hover:text-accent transition-all"
+                className="flex items-center justify-center gap-2 bg-white dark:bg-slate-900 text-primary dark:text-white border-2 border-slate-100 dark:border-slate-800 px-6 py-4 rounded-2xl font-bold text-lg hover:border-accent hover:text-accent transition-all shadow-sm"
               >
                 Trabajemos juntos
               </a>
@@ -180,7 +194,7 @@ const Hero = () => {
 
 const About = () => {
   return (
-    <section id="about" className="py-24 bg-white">
+    <section id="about" className="py-24 bg-white dark:bg-slate-950 transition-colors duration-300 scroll-mt-24 flex items-center min-h-[80vh]">
       <div className="max-w-7xl mx-auto px-6">
         <div className="grid md:grid-cols-2 gap-16 items-center">
           <motion.div
@@ -203,8 +217,8 @@ const About = () => {
                     <Zap size={24} />
                   </div>
                   <div>
-                    <p className="text-sm font-bold text-slate-500 uppercase tracking-wider">Experiencia</p>
-                    <p className="text-xl font-bold text-primary">3+ Años Freelance</p>
+                    <p className="text-sm font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Experiencia</p>
+                    <p className="text-xl font-bold text-primary dark:text-white">3+ Años Freelance</p>
                   </div>
                 </div>
               </div>
@@ -216,16 +230,16 @@ const About = () => {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-3xl md:text-4xl font-bold mb-6 text-primary">
+            <h2 className="text-3xl md:text-4xl font-bold mb-6 text-primary dark:text-white">
               Desarrollo con enfoque estratégico
             </h2>
-            <p className="text-lg text-slate-600 mb-6 leading-relaxed">
-              Soy desarrollador web enfocado en crear aplicaciones que automatizan procesos empresariales.
+            <p className="text-lg text-slate-600 dark:text-slate-400 mb-6 leading-relaxed">
+              Soy <span className="font-semibold text-primary dark:text-blue-400">Fullstack Developer & AI Solutions Architect</span> enfocado en crear aplicaciones que automatizan procesos empresariales.
               No solo escribo código; entiendo el negocio para crear herramientas que realmente generen valor.
             </p>
-            <p className="text-lg text-slate-600 mb-8 leading-relaxed">
-              Trabajo con tecnologías modernas como <span className="font-semibold text-primary">React</span>,
-              <span className="font-semibold text-primary">Node.js</span> y herramientas <span className="font-semibold text-primary">No-Code</span>
+            <p className="text-lg text-slate-600 dark:text-slate-400 mb-8 leading-relaxed">
+              Trabajo con tecnologías modernas como <span className="font-semibold text-primary dark:text-white">React</span>,
+              <span className="font-semibold text-primary dark:text-white">Node.js</span> y herramientas <span className="font-semibold text-primary dark:text-white">No-Code</span>
               para entregar soluciones rápidas y escalables que ayudan a mis clientes a crecer.
             </p>
 
@@ -233,15 +247,15 @@ const About = () => {
               <div className="flex items-start gap-3">
                 <CheckCircle2 className="text-accent mt-1" size={20} />
                 <div>
-                  <h4 className="font-bold text-primary">Enfoque Técnico</h4>
-                  <p className="text-sm text-slate-500">Código limpio y escalable.</p>
+                  <h4 className="font-bold text-primary dark:text-white">Enfoque Técnico</h4>
+                  <p className="text-sm text-slate-500 dark:text-slate-400">Código limpio y escalable.</p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
                 <CheckCircle2 className="text-accent mt-1" size={20} />
                 <div>
-                  <h4 className="font-bold text-primary">Visión de Negocio</h4>
-                  <p className="text-sm text-slate-500">Soluciones orientadas a resultados.</p>
+                  <h4 className="font-bold text-primary dark:text-white">Visión de Negocio</h4>
+                  <p className="text-sm text-slate-500 dark:text-slate-400">Soluciones orientadas a resultados.</p>
                 </div>
               </div>
             </div>
@@ -275,11 +289,11 @@ const Services = () => {
   ];
 
   return (
-    <section id="services" className="py-24 bg-slate-50">
+    <section id="services" className="py-24 bg-slate-50 dark:bg-slate-900 scroll-mt-24 flex items-center min-h-[80vh]">
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center max-w-2xl mx-auto mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-primary">Mis Servicios</h2>
-          <p className="text-slate-600">Transformo tu portafolio en una máquina de ventas con soluciones a medida.</p>
+          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-primary dark:text-white">Mis Servicios</h2>
+          <p className="text-slate-600 dark:text-slate-400">Transformo tu portafolio en una máquina de ventas con soluciones a medida.</p>
         </div>
 
         <div className="grid md:grid-cols-3 gap-8">
@@ -290,13 +304,13 @@ const Services = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.1 }}
-              className="bg-white p-8 rounded-3xl border border-slate-100 hover:border-accent/30 hover:shadow-xl transition-all group"
+              className="bg-white dark:bg-slate-800 p-8 rounded-3xl border border-slate-100 dark:border-slate-700 hover:border-accent/30 dark:hover:border-accent/50 hover:shadow-xl transition-all group"
             >
-              <div className="w-14 h-14 bg-slate-50 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+              <div className="w-14 h-14 bg-slate-50 dark:bg-slate-900 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                 {service.icon}
               </div>
-              <h3 className="text-2xl font-bold mb-4 text-primary">{service.title}</h3>
-              <p className="text-slate-600 mb-6">{service.description}</p>
+              <h3 className="text-2xl font-bold mb-4 text-primary dark:text-white">{service.title}</h3>
+              <p className="text-slate-600 dark:text-slate-400 mb-6">{service.description}</p>
               <ul className="space-y-3">
                 {service.items.map((item, i) => (
                   <li key={i} className="flex items-center gap-2 text-sm font-medium text-slate-500">
@@ -342,12 +356,12 @@ const Projects = () => {
   ];
 
   return (
-    <section id="projects" className="py-24 bg-white">
+    <section id="projects" className="py-24 bg-white dark:bg-slate-950 scroll-mt-24 min-h-[80vh] flex flex-col justify-center">
       <div className="max-w-7xl mx-auto px-6">
         <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
           <div className="max-w-2xl">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-primary">Proyectos Destacados</h2>
-            <p className="text-slate-600">No describo funciones, describo resultados reales para mis clientes.</p>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-primary dark:text-white">Proyectos Destacados</h2>
+            <p className="text-slate-600 dark:text-slate-400">No describo funciones, describo resultados reales para mis clientes.</p>
           </div>
           <a href="#" className="text-accent font-bold flex items-center gap-2 hover:underline">
             Ver todos los proyectos <ChevronRight size={18} />
@@ -361,7 +375,7 @@ const Projects = () => {
               initial={{ opacity: 0, scale: 0.95 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
-              className="group flex flex-col h-full bg-slate-50/50 p-6 rounded-[2.5rem] border border-transparent hover:border-accent/10 hover:bg-white hover:shadow-2xl transition-all duration-500"
+              className="group flex flex-col h-full bg-white dark:bg-slate-900/50 p-6 rounded-[2.5rem] border border-slate-100 dark:border-slate-800/50 hover:border-accent/10 dark:hover:border-accent/20 hover:bg-white dark:hover:bg-slate-900 hover:shadow-2xl transition-all duration-500"
             >
               <div className="relative aspect-[4/3] rounded-3xl overflow-hidden mb-8 shadow-lg">
                 <img
@@ -371,39 +385,39 @@ const Projects = () => {
                   referrerPolicy="no-referrer"
                 />
                 <div className="absolute top-4 left-4">
-                  <span className="px-3 py-1 bg-white/90 backdrop-blur-sm text-xs font-bold rounded-full text-primary uppercase tracking-wider">
+                  <span className="px-3 py-1 bg-white/90 backdrop-blur-sm dark:bg-slate-900/90 text-xs font-bold rounded-full text-primary dark:text-white uppercase tracking-wider">
                     {project.category}
                   </span>
                 </div>
               </div>
               
               <div className="flex flex-col flex-grow">
-                <h3 className="text-2xl font-bold mb-3 text-primary group-hover:text-accent transition-colors min-h-[4rem] line-clamp-2">
+                <h3 className="text-2xl font-bold mb-3 text-primary dark:text-white group-hover:text-accent transition-colors min-h-[4rem] line-clamp-2">
                   {project.title}
                 </h3>
-                <p className="text-slate-600 mb-8 line-clamp-2 min-h-[3rem]">
+                <p className="text-slate-600 dark:text-slate-400 mb-8 line-clamp-2 min-h-[3rem]">
                   {project.description}
                 </p>
                 
                 <div className="mt-auto">
-                  <div className="bg-white border border-slate-100 p-5 rounded-2xl mb-6 shadow-sm group-hover:border-accent/20 transition-colors">
+                  <div className="bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-5 rounded-2xl mb-6 shadow-sm group-hover:border-accent/20 transition-colors">
                     <p className="text-xs font-bold text-accent mb-2 uppercase tracking-widest">Impacto:</p>
-                    <p className="text-sm text-slate-700 italic font-medium">"{project.result}"</p>
+                    <p className="text-sm text-slate-700 dark:text-slate-300 italic font-medium">"{project.result}"</p>
                   </div>
                   
                   <div className="flex flex-wrap gap-2 mb-8 min-h-[2.5rem]">
                     {project.tech.map((t) => (
-                      <span key={t} className="text-[10px] font-bold px-3 py-1.5 bg-slate-100 text-slate-500 rounded-lg uppercase tracking-wider">
+                      <span key={t} className="text-[10px] font-bold px-3 py-1.5 bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 rounded-lg uppercase tracking-wider">
                         {t}
                       </span>
                     ))}
                   </div>
                   
                   <div className="flex gap-3">
-                    <button className="flex-1 flex items-center justify-center gap-2 bg-primary text-white py-4 rounded-2xl font-bold text-sm hover:bg-slate-800 transition-all shadow-lg shadow-slate-200">
+                    <button className="flex-1 flex items-center justify-center gap-2 bg-primary dark:bg-accent text-white py-4 rounded-2xl font-bold text-sm hover:bg-slate-800 dark:hover:bg-blue-600 transition-all shadow-lg">
                       Ver demo <ExternalLink size={14} />
                     </button>
-                    <button className="px-5 border-2 border-slate-100 rounded-2xl hover:border-accent hover:text-accent transition-all text-slate-400">
+                    <button className="px-5 border-2 border-slate-100 dark:border-slate-800 rounded-2xl hover:border-accent hover:text-accent transition-all text-slate-400">
                       <Github size={20} />
                     </button>
                   </div>
@@ -434,25 +448,39 @@ const TechStack = () => {
   ];
 
   return (
-    <section className="py-20 bg-slate-900 text-white overflow-hidden">
+    <section className="py-24 bg-primary dark:bg-slate-900 text-white overflow-hidden border-y border-white/5 dark:border-white/5 transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-6">
         <div className="grid md:grid-cols-4 gap-12 items-center">
-          <div>
-            <h2 className="text-3xl font-bold mb-4">Stack Tecnológico</h2>
-            <p className="text-slate-400">Herramientas modernas para soluciones robustas.</p>
-          </div>
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+          >
+            <h2 className="text-3xl font-bold mb-4 font-display">Stack Tecnológico</h2>
+            <p className="text-slate-400">Herramientas modernas para soluciones robustas y escalables.</p>
+          </motion.div>
+          
           <div className="md:col-span-3 grid sm:grid-cols-3 gap-8">
             {stacks.map((stack, i) => (
-              <div key={i}>
-                <h4 className="text-accent font-bold text-sm uppercase tracking-widest mb-6">{stack.name}</h4>
+              <motion.div 
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+              >
+                <h4 className="text-accent font-bold text-xs uppercase tracking-widest mb-6">{stack.name}</h4>
                 <div className="flex flex-wrap gap-3">
                   {stack.techs.map((tech) => (
-                    <span key={tech} className="px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-sm font-medium hover:bg-white/10 transition-colors">
+                    <span 
+                      key={tech} 
+                      className="px-4 py-2 bg-white/5 dark:bg-white/5 border border-white/10 rounded-xl text-sm font-medium hover:bg-white/10 hover:border-white/20 transition-all cursor-default"
+                    >
                       {tech}
                     </span>
                   ))}
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -486,11 +514,11 @@ const Experience = () => {
   ];
 
   return (
-    <section className="py-24 bg-white">
+    <section className="py-24 bg-white dark:bg-slate-950">
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-primary">Experiencia & Casos Reales</h2>
-          <p className="text-slate-600">Mi trayectoria profesional enfocada en el impacto real.</p>
+          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-primary dark:text-white">Experiencia & Casos Reales</h2>
+          <p className="text-slate-600 dark:text-slate-400">Mi trayectoria profesional enfocada en el impacto real.</p>
         </div>
 
         <div className="max-w-4xl mx-auto space-y-12">
@@ -498,13 +526,12 @@ const Experience = () => {
             <div key={i} className="relative pl-8 border-l-2 border-slate-100">
               <div className="absolute -left-[9px] top-0 w-4 h-4 bg-accent rounded-full border-4 border-white shadow-sm" />
               <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 gap-2">
-                <h3 className="text-2xl font-bold text-primary">{exp.role}</h3>
-                <span className="px-3 py-1 bg-slate-100 text-slate-500 text-xs font-bold rounded-full uppercase tracking-wider">
+                <h3 className="text-2xl font-bold text-primary dark:text-white">{exp.role}</h3>
+                <span className="px-3 py-1 bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 text-xs font-bold rounded-full uppercase tracking-wider">
                   {exp.period}
                 </span>
               </div>
-              <p className="text-slate-600 mb-6 text-lg">{exp.description}</p>
-              <ul className="space-y-3">
+              <p className="text-slate-600 dark:text-slate-400 mb-6 text-lg">{exp.description}</p>              <ul className="space-y-3">
                 {exp.points.map((point, j) => (
                   <li key={j} className="flex items-start gap-3 text-slate-500">
                     <CheckCircle2 size={18} className="text-accent shrink-0 mt-1" />
@@ -597,41 +624,41 @@ const Contact = () => {
               </div>
             </div>
 
-            <div className="bg-white rounded-3xl p-8 text-primary shadow-2xl">
+            <div className="bg-white dark:bg-slate-900 rounded-3xl p-8 text-primary dark:text-white shadow-2xl">
               <form className="space-y-6" onSubmit={handleSubmit}>
                 <div className="grid sm:grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <label className="text-sm font-bold text-slate-500 uppercase tracking-wider">Nombre</label>
+                    <label className="text-sm font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Nombre</label>
                     <input
                       type="text"
                       value={formData.name}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                       required
                       placeholder="Tu nombre"
-                      className="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-xl focus:outline-none focus:border-accent transition-colors"
+                      className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-xl focus:outline-none focus:border-accent transition-colors text-slate-900 dark:text-white"
                     />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-sm font-bold text-slate-500 uppercase tracking-wider">Email</label>
+                    <label className="text-sm font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Email</label>
                     <input
                       type="email"
                       value={formData.email}
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                       required
                       placeholder="tu@email.com"
-                      className="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-xl focus:outline-none focus:border-accent transition-colors"
+                      className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-xl focus:outline-none focus:border-accent transition-colors text-slate-900 dark:text-white"
                     />
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm font-bold text-slate-500 uppercase tracking-wider">Mensaje</label>
+                  <label className="text-sm font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Mensaje</label>
                   <textarea
                     rows={4}
                     value={formData.message}
                     onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                     required
                     placeholder="¿En qué puedo ayudarte?"
-                    className="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-xl focus:outline-none focus:border-accent transition-colors resize-none"
+                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-xl focus:outline-none focus:border-accent transition-colors resize-none text-slate-900 dark:text-white"
                   ></textarea>
                 </div>
                 <button
@@ -660,7 +687,7 @@ const Contact = () => {
 
 const Footer = () => {
   return (
-    <footer className="py-12 bg-white border-t border-slate-100">
+    <footer className="py-12 bg-white dark:bg-slate-950 border-t border-slate-100 dark:border-slate-900">
       <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
         <p className="text-slate-500 text-sm">
           © {new Date().getFullYear()} Harold Developer. Todos los derechos reservados.
@@ -732,10 +759,28 @@ const Testimonials = () => {
 // --- Main App ---
 
 export default function App() {
+  const [darkMode, setDarkMode] = useState(() => {
+    const saved = localStorage.getItem('theme');
+    return saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches);
+  });
+
+  useEffect(() => {
+    const root = document.documentElement;
+    if (darkMode) {
+      root.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      root.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
+    }
+  }, [darkMode]);
+
+  const toggleDarkMode = () => setDarkMode(!darkMode);
+
   return (
-    <div className="min-h-screen selection:bg-accent/30">
-      <Navbar />
-      <main>
+    <div className="min-h-screen transition-colors duration-300 bg-white dark:bg-slate-950 selection:bg-accent/30">
+      <Navbar darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
+      <main className="text-slate-900 dark:text-slate-100">
         <Hero />
         <About />
         <Services />

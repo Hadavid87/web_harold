@@ -1,6 +1,8 @@
 @import "tailwindcss";
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap');
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Outfit", sans-serif;
@@ -11,7 +13,16 @@
 
 @layer base {
   body {
-    @apply bg-slate-50 text-slate-900 font-sans antialiased;
+    @apply bg-white text-slate-900 font-sans antialiased;
+  }
+  
+  /* Forzado de color scheme para evitar override de SO */
+  :root {
+    color-scheme: light;
+  }
+  
+  .dark {
+    color-scheme: dark;
   }
   
   h1, h2, h3, h4, h5, h6 {
